@@ -1,25 +1,24 @@
-<?php 
-	session_start();
-	$errorMessage  = '';
+<?php
+	$errorMessage= '';
 
-	extract($_POST);
-	$pass = md5($pass);
 	if(isset($_POST['submit'])) {
-		require_once("db_connexion.php");
-		$sql = $handler->query(" SELECT * FROM users WHERE login = '$login' AND password = '$pass' ");
-		$result = $sql->rowCount();
-		if($result > 0) {
-			$_SESSION = array('login' => $login, 'password' => $pass);
+		require_once('db_connexion.php');
+		extract($_POST);
+		$password = md5($pass);
+		$sql = $handler->prepare("SELECT * FROM users WHERE login = :login AND password = :password");
+		$sql->execute(['login' => $login,'password' => $password]);
+		$count = $sql->fetch(PDO::FETCH_NUM);
+		if($count > 0) {
+			$_SESSION = array('login' => $login ,'password' => $password);
 			switch ($login) {
 				case 'admin':
-					header("Location: staff_home.php");
+					echo "<script type='text/javascript'>document.location.replace('staff_home.php');</script>";
 					break;
+				
 				default:
-					header("Location: hotel_home.php");
+					echo "<script type='text/javascript'>document.location.replace('hotel_home.php');</script>";
 					break;
 			}
-		} else {
-			$errorMessage = 'Mauvais login/password !';
 		}
 	}
 ?><!doctype html> 
@@ -41,4 +40,3 @@
 		</section>
 	</body>
 </html>
-
