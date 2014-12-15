@@ -15,6 +15,7 @@
 				<h1>Gestion des réservations</h1>
 				<div><a href="add_heberg.php"><button>Ajouter un hébergement</button></a></div>
 				<div><a href="add_resa.php"><button>Ajouter une réservation</button></a></div>
+				<div><a href="add_vip.php"><button>Ajouter un Vip</button></a></div>
 				<div><a href="#"><button>Supprimer une réservation</button></a></div>
 		   	</div>
 		</section>

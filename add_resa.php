@@ -4,7 +4,7 @@
 	extract($_POST);
 	if (isset($submit)) {
 		require_once("db_connexion.php");
-		$sql = $handler->prepare("SELECT * FROM (`id_vip`,`id_herberg`,`date_d`,`date_f`) VALUES (:id_vip,:id_herberg,:date_d,:date_f)");
+		$sql = $handler->prepare("SELECT * FROM reservation VALUES (:id_vip,:id_herberg,:date_d,:date_f)");
 		$sql->execute(['id_vip' => $])*/
 	}
 ?><!doctype html> 

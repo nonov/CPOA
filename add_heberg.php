@@ -2,10 +2,14 @@
 	session_start();
 
 	extract($_POST);
+	$login = strip_tags($_POST['login'];
+	$pass = md5($_POST['password']);
+	$email = strip_tags($_POST['email']);
+
 	if (isset($submit)) {
 		require_once("db_connexion.php");
 		$sql = $handler->prepare("INSERT INTO users(`login`,`password`,`email`) VALUES (:login,:password,:email)");
-		$sql->execute(['login' => $login, 'password' => md5($password), 'email' => $email]);
+		$sql->execute(['login' => $login, 'password' => $password, 'email' => $email]);
 		echo "<script type='text/javascript'>document.location.replace('staff_home.php');</script>";
 
 		$to = $email; 
