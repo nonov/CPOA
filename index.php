@@ -1,8 +1,11 @@
 <?php
+	session_start();
+	require_once('functions.php');
 	$errorMessage= '';
 
 	if(isset($_POST['submit'])) {
 		require_once('db_connexion.php');
+		test_input($_POST);
 		extract($_POST);
 		$password = md5($pass);
 		$sql = $handler->prepare("SELECT * FROM users WHERE login = :login AND password = :password");
@@ -30,7 +33,7 @@
 	</head>
 	<body>
 		<section>	
-			<form action="index.php" method="post">
+			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
 				<h1>Connection</h1>
 				<div><input type="text" name="login" placeholder="Login"/></div>
 				<div><input type="password" name="pass" placeholder="Password"/></div>

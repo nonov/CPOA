@@ -1,10 +1,10 @@
 <?php
 	session_start();
-
-	extract($_POST);
+	require_once("functions.php");
 	if (isset($submit)) {
 		require_once("db_connexion.php");
-		$sql = $handler->prepare("SELECT * FROM reservation VALUES (:id_vip,:id_herberg,:date_d,:date_f)");
+		extract($_POST);
+		$sql = $handler->prepare("SELECT * FROM  WHERE ");
 		$sql->execute(['id_vip' => $])*/
 	}
 ?><!doctype html> 

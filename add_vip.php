@@ -1,25 +1,29 @@
 <?php
 	session_start();
+	require_once('functions.php');
 	$errorMessage = "";
-
 	if(isset($_POST['submit'])) {
-		$nom = strip_tags($_POST['nom']);
-		$prenom = strip_tags($_POST['prenom']);
-		$email = strip_tags($_POST['email']);
+		require_once('db_connexion.php');
+		test_input($_POST);
+		extract($_POST);
+
 		if (preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#i", $email)) {
 		} else {
 			$errorMessage = "Adresse email, non valide";
-			$email = "";
+			echo "<script type='text/javascript'>document.location.replace('add_vip.php');</script>";
 		}
-		$job = strip_tags($_POST['job']);
-		$pays = $_POST['pays'];
-		$jury = $_POST['jury'];
-		$type_jury = $_POST['type_jury'];
 
-		$newVip = new Vip("$nom","$prenom","$email","$job","$pays","$jury","$type_jury");
-		$errorMessage = $newVip->AddVip();
+		$test = $handler->prepare("SELECT * FROM user WHERE nom = :nom AND prenom = :prenom AND email = :email");
+		$test->execute(['nom' => $nom, 'prenom' => $prenom, 'email' => $email]);
+		$count = $test->fetch(PDO::FETCH_NUM);
+		if($count > 0) {
+			$errorMessage = "Cet utilisateur existe déjà !";
+			echo "<script type='text/javascript'>document.location.replace('add_vip.php');</script>";
+		} else {
+			$add = $handler->prepare("INSERT INTO vip(`nom`,`prenom`,`email`,`job`,`pays`,`jury`,`type_jury) VALUES (:nom,:prenom,:email,:job,:pays,:jury,:type_jury");
+			$add->execute(['nom' => $nom, 'prenom' => $prenom, 'email' => $email, 'job' => $job, 'pays' => $pays, 'jury' => $jury, 'type_jury' => $type_jury]);
+		}
 	}
-
 ?><!doctype html> 
 <html lang="fr">
 	<head>
@@ -31,7 +35,7 @@
 		<p><?php echo $_SESSION['login']; ?></p>
 		<section>
 			<a href="staff_home.php">Retour</a>	
-			<form action="add_heberg.php" method="post" id="formID">
+			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
 				<h1>Ajout d'un VIP à la base de données</h1>
 				<div><input type="text" name="nom" style="width:180px" placeholder="Nom" required = "true"></div>
 				<div><input type="text" name="prenom" style="width:180px" placeholder="Prénom" required = "true"></div>				
@@ -263,7 +267,7 @@
 						<option value="Vierges_Britanniques">Vierges_Britanniques </option>
 						<option value="Vietnam">Vietnam </option>
 						<option value="Wake">Wake </option>
-						<option value="Wallis et Futuma">Wallis et Futuma </option>
+						<option value="Wallis et Futuna">Wallis et Futuna </option>
 						<option value="Yemen">Yemen </option>
 						<option value="Yougoslavie">Yougoslavie </option>
 						<option value="Zambie">Zambie </option>
@@ -280,6 +284,7 @@
 						<option value="AUTRES">Autres ...</option>
 					</select>
 				</div>	
+				<div style="color:black;"><?php echo $errorMessage; ?></div>
 				<p id="errorMessage" style="display:none; color:black;">Merci de remplir le formulaire en entier!</p>
 				<div><input style="width:180px" type="submit" name="submit" value="Ajouter"></div>
           	</form>
