@@ -15,5 +15,7 @@ public class FestivalDeCannes {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        InterfacePlanning laFenetre = new InterfacePlanning();
+                laFenetre.setVisible(true);
     }
 }
